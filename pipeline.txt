@@ -67,14 +67,14 @@ pipeline{
         }
         stage('Deploy to container'){
             steps{
-                sh 'docker run -d -p 8081:80 nasi101/netflix:latest'
+                sh 'docker run -d -p 8081:80 kajalkk/netflix:latest'
             }
         }
         stage('Deploy to kubernets'){
             steps{
                 script{
                     dir('Kubernetes') {
-                        withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'k8s', namespace: '', restrictKubeConfigAccess: false, serverUrl: '') {
+                        withKubeConfig(caCertificate: '', clusterName: 'Netflix', contextName: 'arn:aws:eks:ap-southeast2:223303593004:cluster/Netflix', credentialsId: 'k8s', namespace: 'default', restrictKubeConfigAccess: false, serverUrl: '') {
                                 sh 'kubectl apply -f deployment.yml'
                                 sh 'kubectl apply -f service.yml'
                         }   
@@ -91,7 +91,7 @@ pipeline{
             body: "Project: ${env.JOB_NAME}<br/>" +
                 "Build Number: ${env.BUILD_NUMBER}<br/>" +
                 "URL: ${env.BUILD_URL}<br/>",
-            to: 'iambatmanthegoat@gmail.com',                                #change mail here
+            to: 'kajalkomal0017@gmail.com',                                
             attachmentsPattern: 'trivyfs.txt,trivyimage.txt'
         }
     }
